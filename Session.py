@@ -4,6 +4,7 @@ import datetime
 from urllib.parse import urlencode
 from requests.models import codes
 import six
+import bottle
 from bottle import route, run, request
 import spotipy
 from spotipy import oauth2
@@ -60,6 +61,8 @@ class SpotifyAPISession(object):
             if token_info:
                 print("Found cached token!")
                 access_token = token_info['access_token']
+                self.access_token = access_token
+                
             else:
                 url = request.url
                 code = sp_oauth.parse_response_code(url)
@@ -69,10 +72,11 @@ class SpotifyAPISession(object):
                     access_token = token_info['access_token']
 
             if access_token:
-                print("Access token available! Trying to get user information...")
-                sp = spotipy.Spotify(access_token)
-                results = sp.current_user()
-                return results
+                pass
+                #print("Access token available! Trying to get user information...")
+                #sp = spotipy.Spotify(access_token)
+                #results = sp.current_user()
+                #return results
 
             else:
                 return htmlForLoginButton()
@@ -88,58 +92,8 @@ class SpotifyAPISession(object):
 
         run(host='', port=8080)
 
-        
+        print(self.access_token)
 
-        '''
-        auth_url = "https://accounts.spotify.com/authorize?" + urlencode({
-                                                                'client_id': self.client_id, 
-                                                                'response_type': 'code',
-                                                                'redirect_uri': 'http://localhost:8080'
-                                                                })
-
-
-
-
-
-        url = "https://accounts.spotify.com/api/token" 
-        auth_header = base64.b64encode(six.text_type(self.client_id + ':' + self.client_secret).encode('ascii')) 
-        
-
-        headers = {
-            'Authorization':'Basic %s' % auth_header.decode('ascii')
-        }
-        
-        data = {
-            'grant_type': 'authorization_code',
-            'scope': scopes,
-
-
-        }
-
-
-
-
-        client_creds = f"{self.client_id}:{self.client_secret}"     # client information formatted
-        client_creds_b64 = base64.b64encode(client_creds.encode())  # client information in b64
-
-        # Post Request to Spotify details
-        token_url = "https://accounts.spotify.com/api/token"        
-
-        token_data = {
-            "grant_type": "client_credentials"
-        }
-
-        token_headers = {
-            "Authorization": f"Basic {client_creds_b64.decode()}"
-        }
-
-        # Send Post request and if the response is valid, record the information
-        response = self.sendRequest(token_url, token_data, token_headers, 'POST')
-        
-        self.access_token = response['access_token']
-        self.access_token_expires = response['expires_in']
-        #print("token = {}".format(self.access_token))
-        '''
 
 
         
