@@ -10,4 +10,4 @@ print("\n\nafter everything\n")
 #print("{}\n{}\n{}\n{}\n".format(session.client_id, session.client_secret, session.access_token, session.access_token_expires))
 #session.checkTokenExpiry()
 
-#session.requestUserTopTracks()
+session.requestUserTopTracks()

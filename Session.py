@@ -46,7 +46,7 @@ class SpotifyAPISession(object):
         SPOTIPY_CLIENT_ID = self.client_id
         SPOTIPY_CLIENT_SECRET = self.client_secret
         SPOTIPY_REDIRECT_URI = 'http://localhost:8080'
-        SCOPE = 'user-read-playback-state'
+        SCOPE = 'user-read-playback-state user-top-read'
         CACHE = '.spotipyoauthcache'
 
         sp_oauth = oauth2.SpotifyOAuth( SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET,SPOTIPY_REDIRECT_URI,scope=SCOPE,cache_path=CACHE )
@@ -107,15 +107,38 @@ class SpotifyAPISession(object):
             "Authorization": f"Bearer {self.access_token}"
         }
         data = urlencode({
-            "limit": 5,
-            "offset": 0,
-            "time_range": "short_term"
+            "limit": 2,
+            "offset": 49,
+            "time_range": "long_term"
         })
         endpoint = self.base_url + "/me/top/tracks"
         lookup_url = f"{endpoint}?{data}"
-        print(lookup_url)
+        #print(lookup_url)
         r = requests.get(lookup_url, headers=headers)
         print(r.status_code)
+        print("\n")
+
+        resultJSON = r.json()   # Stores JSON with all info. Still need to parse it
+
+        result = []
+        print(resultJSON['items'])
+        '''
+        for i in range(50):
+            songDict = {}
+        
+            songDict['artist_id'] = resultJSON['items'][i]['album']['artists'][0]['id']
+            songDict['artist_name'] = resultJSON['items'][i]['album']['artists'][0]['name']
+            songDict['song_name'] = resultJSON['items'][i]['name']
+            songDict['song_id'] = resultJSON['items'][i]['id']
+            result.append(songDict)
+        
+        for j in range(len(result)):
+            print(result[j]['song_name'])
+        
+        '''
+        
+        
+        
         
         
 
